@@ -69,6 +69,7 @@ class TaskAgent(BaseAgent):
 ```
 
 ### 5. 기본값 매개변수 활용
+
 디폴트 아규먼트를 적극 활용하여 유연성을 제공합니다:
 
 ```python
@@ -83,6 +84,7 @@ def configure_agent(self,
 ## Entry Point 설정
 
 ### main 함수 구현
+
 프로젝트의 진입점으로 main 함수를 설정합니다:
 
 ```python
@@ -116,18 +118,22 @@ if __name__ == "__main__":
 ## 모범 사례
 
 ### 1. 상태 관리
+
 - 에이전트의 상태를 명확히 정의합니다
 - 상태 전환을 메서드로 캡슐화합니다
 
 ### 2. 오류 처리
+
 - 예외 상황에 대한 적절한 처리를 구현합니다
 - 로깅을 통한 디버깅 정보를 제공합니다
 
 ### 3. 설정 관리
+
 - 외부 설정 파일을 활용합니다
 - 환경변수를 통한 동적 설정을 지원합니다
 
 ### 4. 테스트 가능한 코드
+
 - 단위 테스트가 가능하도록 설계합니다
 - Mock 객체를 활용한 테스트를 고려합니다
 
@@ -164,9 +170,10 @@ class MonitoringAgent(BaseAgent):
 ## 모듈 구조 및 Import 방식
 
 ### 1. 디렉토리 구조
+
 권장하는 프로젝트 구조:
 
-```
+```text
 project/
 ├── agents/
 │   ├── __init__.py
@@ -192,6 +199,7 @@ project/
 ### 2. 모듈 Import 규칙
 
 #### 절대 Import 사용
+
 상대 import 대신 절대 import를 사용합니다:
 
 ```python
@@ -207,6 +215,7 @@ from ..utils.config import load_config
 ```
 
 #### __init__.py 활용
+
 각 패키지의 `__init__.py`에서 주요 클래스를 노출합니다:
 
 ```python
@@ -221,6 +230,7 @@ __all__ = ['BaseAgent', 'TaskAgent', 'MonitoringAgent']
 ```
 
 #### 타입 Import 분리
+
 타입 힌트용 import는 TYPE_CHECKING으로 분리합니다:
 
 ```python
@@ -238,6 +248,7 @@ class AgentManager:
 ### 3. 모듈 간 통신
 
 #### 이벤트 시스템 활용
+
 ```python
 from typing import Callable, Dict, List
 import threading
@@ -269,16 +280,19 @@ class EventBus:
 ### 1. 문서 종류 및 역할
 
 #### README.md
+
 - 프로젝트 개요 및 설치 방법
 - 빠른 시작 가이드
 - 기본 사용 예제
 
 #### Project.md
+
 - 프로젝트 아키텍처 상세 설명
 - 설계 결정사항 및 근거
 - API 문서 및 클래스 다이어그램
 
 #### ChangeLog.md
+
 - 버전별 변경사항 기록
 - 버그 수정 및 새로운 기능 추가
 - 호환성 변경사항
@@ -286,13 +300,16 @@ class EventBus:
 ### 2. 문서 작성 규칙
 
 #### 버전 관리
+
 모든 문서는 의미적 버전 관리(Semantic Versioning)를 따릅니다:
+
 - MAJOR.MINOR.PATCH (예: 1.2.3)
 - 호환성 깨지는 변경: MAJOR 증가
 - 새 기능 추가: MINOR 증가  
 - 버그 수정: PATCH 증가
 
 #### 문서 업데이트 주기
+
 - 코드 변경 시 즉시 관련 문서 업데이트
 - 릴리스 전 모든 문서 검토 및 정리
 - 월 단위 문서 품질 점검
@@ -300,6 +317,7 @@ class EventBus:
 ### 3. 코드 내 문서화
 
 #### 모듈 수준 docstring
+
 ```python
 """
 agents.task_agent 모듈
@@ -318,6 +336,7 @@ Examples:
 ```
 
 #### 클래스 및 메서드 문서화
+
 ```python
 class ConfigurableAgent(BaseAgent):
     """
@@ -367,6 +386,7 @@ class ConfigurableAgent(BaseAgent):
 ### 1. uv 설치 및 설정
 
 #### uv 설치
+
 ```bash
 # Linux/macOS
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -379,6 +399,7 @@ pip install uv
 ```
 
 #### 설치 확인
+
 ```bash
 uv --version
 ```
@@ -386,6 +407,7 @@ uv --version
 ### 2. 프로젝트 초기화 및 가상환경 생성
 
 #### 새 프로젝트 생성
+
 ```bash
 # 프로젝트 디렉토리 생성 및 초기화
 mkdir ai_literacy_project
@@ -394,6 +416,7 @@ uv init
 ```
 
 #### 기존 프로젝트에서 가상환경 생성
+
 ```bash
 # Python 3.11을 사용하는 가상환경 생성
 uv venv --python 3.11
@@ -406,6 +429,7 @@ uv venv agent_env
 ```
 
 #### 가상환경 활성화
+
 ```bash
 # Linux/macOS
 source .venv/bin/activate
@@ -420,6 +444,7 @@ uv shell
 ### 3. 패키지 관리
 
 #### 의존성 설치
+
 ```bash
 # pyproject.toml 기반 설치
 uv sync
@@ -438,6 +463,7 @@ uv add --optional ai torch transformers
 ```
 
 #### pyproject.toml 예제
+
 ```toml
 [project]
 name = "ai-literacy"
@@ -477,6 +503,7 @@ dev-dependencies = [
 ```
 
 #### 패키지 업데이트 및 제거
+
 ```bash
 # 모든 패키지 업데이트
 uv sync --upgrade
@@ -494,6 +521,7 @@ uv sync --prune
 ### 4. 프로젝트 실행
 
 #### uv를 통한 실행
+
 ```bash
 # 메인 모듈 실행
 uv run python main.py
@@ -513,6 +541,7 @@ uv run flake8 .
 ```
 
 #### 환경별 실행 설정
+
 ```python
 # main.py
 def main():
@@ -555,6 +584,7 @@ if __name__ == "__main__":
 ### 5. 개발 워크플로우
 
 #### 프로젝트 설정 스크립트
+
 ```python
 # scripts/setup_project.py
 """프로젝트 초기 설정 스크립트"""
@@ -626,54 +656,56 @@ if __name__ == "__main__":
 ```
 
 #### Makefile 예제
+
 ```makefile
 # Makefile
 .PHONY: install test lint format clean run
 
 # 의존성 설치
 install:
-	uv sync --dev
+    uv sync --dev
 
 # 테스트 실행
 test:
-	uv run pytest -v --cov=ai_literacy
+    uv run pytest -v --cov=ai_literacy
 
 # 린터 실행
 lint:
-	uv run flake8 ai_literacy tests
-	uv run mypy ai_literacy
+    uv run flake8 ai_literacy tests
+    uv run mypy ai_literacy
 
 # 코드 포맷팅
 format:
-	uv run black ai_literacy tests
-	uv run isort ai_literacy tests
+    uv run black ai_literacy tests
+    uv run isort ai_literacy tests
 
 # 정적 분석
 check: lint test
 
 # 환경 정리
 clean:
-	find . -type d -name "__pycache__" -delete
-	find . -type f -name "*.pyc" -delete
-	rm -rf .pytest_cache
-	rm -rf .coverage
+    find . -type d -name "__pycache__" -delete
+    find . -type f -name "*.pyc" -delete
+    rm -rf .pytest_cache
+    rm -rf .coverage
 
 # 애플리케이션 실행
 run:
-	uv run python main.py
+    uv run python main.py
 
 # 개발 서버 실행
 dev:
-	uv run python main.py --debug
+    uv run python main.py --debug
 
 # 프로덕션 실행
 prod:
-	ENVIRONMENT=production uv run python main.py
+    ENVIRONMENT=production uv run python main.py
 ```
 
 ### 6. CI/CD 통합
 
 #### GitHub Actions 예제
+
 ```yaml
 # .github/workflows/test.yml
 name: Test
@@ -713,6 +745,7 @@ jobs:
 ### 7. 환경별 설정 관리
 
 #### 환경 설정 파일
+
 ```yaml
 # config/development.yaml
 environment: development
@@ -749,6 +782,7 @@ database:
 ```
 
 #### 환경별 실행
+
 ```bash
 # 개발 환경
 uv run python main.py

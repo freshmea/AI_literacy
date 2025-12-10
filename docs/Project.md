@@ -3,11 +3,13 @@
 ## 1. 시스템 개요
 
 ### 1.1 프로젝트 목표
+
 - 확장 가능한 에이전트 기반 자동화 시스템 구축
 - 객체지향 설계 원칙을 통한 유지보수성 향상
 - 모듈형 아키텍처로 재사용성 극대화
 
 ### 1.2 핵심 설계 원칙
+
 - **단일 책임 원칙**: 각 클래스는 하나의 명확한 책임을 가짐
 - **의존성 역전**: 인터페이스에 의존하며 구체 클래스에 의존하지 않음
 - **개방-폐쇄 원칙**: 확장에는 열려있고 변경에는 닫혀있음
@@ -16,7 +18,7 @@
 
 ### 2.1 계층 구조
 
-```
+```text
 ┌─────────────────┐
 │  Application    │ ← main.py, CLI interface
 ├─────────────────┤
@@ -31,6 +33,7 @@
 ### 2.2 핵심 컴포넌트
 
 #### 2.2.1 BaseAgent 클래스
+
 ```python
 class BaseAgent:
     """
@@ -68,6 +71,7 @@ class BaseAgent:
 ```
 
 #### 2.2.2 TaskAgent 구현
+
 ```python
 class TaskAgent(BaseAgent):
     """작업 처리 전문 에이전트"""
@@ -101,6 +105,7 @@ graph TD
 ## 3. 데이터 모델
 
 ### 3.1 작업(Task) 구조
+
 ```python
 @dataclass
 class Task:
@@ -117,6 +122,7 @@ class Task:
 ```
 
 ### 3.2 설정(Config) 구조
+
 ```yaml
 # config/schema.yaml
 agent:
@@ -142,6 +148,7 @@ database:
 ## 4. 디자인 패턴 적용
 
 ### 4.1 Factory Pattern (팩토리 패턴)
+
 ```python
 class AgentFactory:
     """에이전트 생성 팩토리"""
@@ -164,6 +171,7 @@ class AgentFactory:
 ```
 
 ### 4.2 Observer Pattern (관찰자 패턴)
+
 ```python
 class EventManager:
     """이벤트 기반 통신 관리자"""
@@ -187,6 +195,7 @@ class EventManager:
 ```
 
 ### 4.3 Strategy Pattern (전략 패턴)
+
 ```python
 class TaskProcessor:
     """작업 처리 전략 인터페이스"""
@@ -213,16 +222,19 @@ class FileProcessor(TaskProcessor):
 ## 5. 성능 고려사항
 
 ### 5.1 멀티스레딩 전략
+
 - ThreadPoolExecutor를 활용한 동시 작업 처리
 - GIL 제한을 고려한 I/O 바운드 작업 중심 설계
 - CPU 집약적 작업은 ProcessPoolExecutor 사용
 
 ### 5.2 메모리 관리
+
 - 대용량 데이터 처리 시 청크 단위 처리
 - 약한 참조(weak reference) 활용으로 메모리 누수 방지
 - 적절한 캐시 정책 적용
 
 ### 5.3 확장성 설계
+
 - 수평 확장을 위한 메시지 큐 시스템 준비
 - 상태 공유를 최소화한 stateless 설계
 - 설정 기반 동적 스케일링 지원
@@ -230,6 +242,7 @@ class FileProcessor(TaskProcessor):
 ## 6. 테스트 전략
 
 ### 6.1 단위 테스트
+
 ```python
 class TestTaskAgent(unittest.TestCase):
     """TaskAgent 단위 테스트"""
@@ -247,11 +260,13 @@ class TestTaskAgent(unittest.TestCase):
 ```
 
 ### 6.2 통합 테스트
+
 - 에이전트 간 통신 테스트
 - 설정 파일 로딩 테스트  
 - 데이터베이스 연동 테스트
 
 ### 6.3 성능 테스트
+
 - 부하 테스트 (대용량 작업 처리)
 - 메모리 사용량 모니터링
 - 응답시간 측정 및 최적화
@@ -259,6 +274,7 @@ class TestTaskAgent(unittest.TestCase):
 ## 7. 배포 및 운영
 
 ### 7.1 환경별 설정
+
 ```yaml
 # config/production.yaml
 agent:
@@ -275,11 +291,13 @@ database:
 ```
 
 ### 7.2 모니터링
+
 - 프로메테우스 메트릭 수집
 - 그라파나 대시보드 구성
 - 알람 정책 설정
 
 ### 7.3 백업 및 복구
+
 - 데이터베이스 정기 백업
 - 설정 파일 버전 관리
 - 장애 복구 프로시저 문서화
