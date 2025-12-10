@@ -1,0 +1,11 @@
+=== 선형 회귀 분석 결과 (thalachh -> cp) ===
+
+모델 수식: cp = 0.0133 * thalachh + -1.0272
+계수 (Coefficient): 0.0133
+절편 (Intercept): -1.0272
+
+=== 성능 지표 ===
+MSE: 0.9688
+RMSE: 0.9843
+MAE: 0.8605
+R2 Score: 0.0875

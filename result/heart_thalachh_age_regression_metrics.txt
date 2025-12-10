@@ -1,0 +1,11 @@
+=== 선형 회귀 분석 결과 (age -> thalachh) ===
+
+모델 수식: thalachh = -1.0051 * age + 204.2892
+계수 (Coefficient): -1.0051
+절편 (Intercept): 204.2892
+
+=== 성능 지표 ===
+MSE: 439.8657
+RMSE: 20.9730
+MAE: 16.9135
+R2 Score: 0.1588
