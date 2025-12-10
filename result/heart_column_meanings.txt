@@ -1,0 +1,16 @@
+=== 심장 마비 데이터 컬럼 의미 분석 ===
+
+age: 나이 (Age)
+sex: 성별 (Sex) (1=남성, 0=여성)
+cp: 흉통 유형 (Chest Pain Type) (0-3)
+trtbps: 안정 시 혈압 (Resting Blood Pressure) (mm Hg)
+chol: 콜레스테롤 (Cholesterol) (mg/dl)
+fbs: 공복 혈당 (Fasting Blood Sugar) > 120 mg/dl (1=True, 0=False)
+restecg: 안정 시 심전도 결과 (Resting ECG)
+thalachh: 최대 심박수 (Max Heart Rate Achieved)
+exng: 운동 유발 협심증 (Exercise Induced Angina) (1=Yes, 0=No)
+oldpeak: ST 우울 (ST Depression Induced by Exercise)
+slp: ST 분절 기울기 (Slope of the Peak Exercise ST Segment)
+caa: 주요 혈관 수 (Number of Major Vessels) (0-3)
+thall: 탈륨 스트레스 테스트 결과 (Thallium Stress Test)
+output: 심장 마비 발생 여부 (Target) (1=발생 가능성 높음, 0=낮음)
