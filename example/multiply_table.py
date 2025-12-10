@@ -85,6 +85,8 @@ def main() -> None:
     gugudan.print_dan(7)
     print()
 
+    gugudan.print_dan(1)  # 1단 출력 예시 (유효성 검사 포함)
+
     # 3) 설정 변경: 3단 ~ 5단, 곱하는 수는 1 ~ 5까지만
     print("=== 범위 설정 변경: 3단 ~ 5단, 1~5 ===")
     gugudan.update_range(start_dan=3, end_dan=5, max_multiplier=5)
