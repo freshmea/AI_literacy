@@ -22,3 +22,7 @@
   - 여러 파일을 다루고 서로 모듈로서 접근하는 방식도 지정하고, 문서를 만들어서 운용하는 방식도 지정해줘 changeRog.md  와 ReadME.md 그리고 Project.md 를 운영해줘.
   - 이 csv 파일을 분석해서 얻을수 있는 다양한 insight 를 정리해서 txt 파일로 내보내고 시각화 할 수 있는 데이터는 시각화를 해서 그림파일로 내보내줘 결과는 result 라는 폴더를 만들어서 로그파일 형식으로 저장해줘 ( csv 파일 첨부됨 )
   - 결과를 확인 했을때 sentiment_distribution.png 이결과에서 한글 폰트가 깨져 있다. 한글이 정상적으로 표현 될 수 있게 수정해줘
+
+```text
+ "chat.useAgentsMdFile": true,
+```
