@@ -443,6 +443,29 @@ pre {
     color: var(--muted);
 }
 
+.note.error {
+    background: rgba(251, 146, 60, 0.12);
+    border-color: rgba(251, 146, 60, 0.6);
+    color: #fed7aa;
+}
+
+.chat-table table th:nth-child(3),
+.chat-table table td:nth-child(3) {
+    width: 60%;
+}
+
+.chat-table {
+    margin-top: 12px;
+    max-height: 360px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.chat-form {
+    margin-top: 16px;
+}
+
 @media (max-width: 640px) {
     .topbar {
         flex-direction: column;

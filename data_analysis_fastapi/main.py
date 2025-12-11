@@ -22,10 +22,12 @@ app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 
 
 class ChatMessage(SQLModel, table=True):
+    __tablename__ = "chat_messages"
+    __table_args__ = {"extend_existing": True}
     id: int | None = Field(default=None, primary_key=True)
     user: str = Field(index=True)
     content: str
-    created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
@@ -85,8 +87,9 @@ def chat_page(
     session: Session = Depends(get_session),
 ) -> HTMLResponse:
     messages = session.exec(
-        select(ChatMessage).order_by(ChatMessage.created_at.desc()).limit(40)
+        select(ChatMessage).order_by(ChatMessage.created_at.desc(), ChatMessage.id.desc()).limit(40)
     ).all()
+    messages = list(reversed(messages))
     error = request.query_params.get("error")
     return templates.TemplateResponse(
         "chat.html",

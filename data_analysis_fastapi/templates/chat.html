@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+    <header>
+        <p class="eyebrow">채팅</p>
+        <h2>SQLite + SQLModel 예제</h2>
+        <p>이름을 입력한 뒤 메시지를 보내면 데이터베이스에 저장되고, 최근 40개 메시지가 표시됩니다.</p>
+        {% if error %}
+            <div class="note error">{{ error }}</div>
+        {% endif %}
+    </header>
+
+    <div class="table-wrap chat-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>시간 (UTC)</th>
+                    <th>유저</th>
+                    <th>내용</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in messages %}
+                    <tr>
+                        <td>{{ item.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>{{ item.user }}</td>
+                        <td>{{ item.content }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3">아직 채팅이 없습니다. 첫 메시지를 남겨보세요!</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <form id="chat-form" class="demo-form chat-form" method="post" action="{{ url_for('post_chat') }}">
+        <div class="field">
+            <label for="user">이름 (필수)</label>
+            <input id="user" name="user" type="text" placeholder="닉네임을 입력하세요" required>
+        </div>
+        <div class="field">
+            <label for="content">메시지</label>
+            <textarea id="content" name="content" rows="3" placeholder="채팅 내용을 입력하세요 (Shift+Enter 줄바꿈)" required></textarea>
+        </div>
+        <div class="actions">
+            <button type="submit" class="btn primary">보내기</button>
+        </div>
+    </form>
+</section>
+
+<script>
+    (() => {
+        const userInput = document.getElementById("user");
+        const contentInput = document.getElementById("content");
+        const form = document.getElementById("chat-form");
+        const storedUser = localStorage.getItem("chat_user");
+        if (storedUser) {
+            userInput.value = storedUser;
+        }
+
+        // Submit on Enter, allow Shift+Enter for newline.
+        contentInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                form.requestSubmit();
+            }
+        });
+
+        form.addEventListener("submit", () => {
+            localStorage.setItem("chat_user", userInput.value.trim());
+        });
+
+        // Scroll to latest messages at bottom.
+        const chatWrap = document.querySelector(".chat-table");
+        if (chatWrap) {
+            chatWrap.scrollTop = chatWrap.scrollHeight;
+        }
+    })();
+</script>
+{% endblock %}
