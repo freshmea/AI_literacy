@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, Form, Request, status
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlmodel import Field, Session, SQLModel, create_engine, select
@@ -126,6 +126,24 @@ def post_chat(
     session.commit()
     session.refresh(message)
     return RedirectResponse(url="/chat", status_code=status.HTTP_303_SEE_OTHER)
+
+
+@app.get("/chat/all", name="chat_all")
+def chat_all(session: Session = Depends(get_session)) -> JSONResponse:
+    messages = session.exec(
+        select(ChatMessage).order_by(ChatMessage.created_at.desc(), ChatMessage.id.desc())
+    ).all()
+    return JSONResponse(
+        [
+            {
+                "id": msg.id,
+                "user": msg.user,
+                "content": msg.content,
+                "created_at": msg.created_at.isoformat(),
+            }
+            for msg in messages
+        ]
+    )
 
 
 @app.on_event("startup")

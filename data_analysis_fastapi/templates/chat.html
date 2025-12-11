@@ -9,6 +9,9 @@
         {% if error %}
             <div class="note error">{{ error }}</div>
         {% endif %}
+        <div class="actions">
+            <button type="button" id="open-all-btn" class="btn ghost">전체 메시지 보기</button>
+        </div>
     </header>
 
     <div class="table-wrap chat-table">
@@ -29,9 +32,9 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="3">아직 채팅이 없습니다. 첫 메시지를 남겨보세요!</td>
-                    </tr>
-                {% endfor %}
+                <td colspan="3">아직 채팅이 없습니다. 첫 메시지를 남겨보세요!</td>
+            </tr>
+        {% endfor %}
             </tbody>
         </table>
     </div>
@@ -51,12 +54,28 @@
     </form>
 </section>
 
+<div id="all-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>전체 메시지</h3>
+            <button id="modal-close" class="btn ghost">닫기</button>
+        </div>
+        <div id="modal-body" class="modal-body">
+            <p class="muted">로딩 중...</p>
+        </div>
+    </div>
+</div>
+
 <script>
     (() => {
         const userInput = document.getElementById("user");
         const contentInput = document.getElementById("content");
         const form = document.getElementById("chat-form");
         const storedUser = localStorage.getItem("chat_user");
+        const openAllBtn = document.getElementById("open-all-btn");
+        const modal = document.getElementById("all-modal");
+        const modalClose = document.getElementById("modal-close");
+        const modalBody = document.getElementById("modal-body");
         if (storedUser) {
             userInput.value = storedUser;
         }
@@ -71,6 +90,8 @@
 
         form.addEventListener("submit", () => {
             localStorage.setItem("chat_user", userInput.value.trim());
+            // Keep focus for rapid consecutive messages.
+            setTimeout(() => contentInput.focus(), 0);
         });
 
         // Scroll to latest messages at bottom.
@@ -78,6 +99,63 @@
         if (chatWrap) {
             chatWrap.scrollTop = chatWrap.scrollHeight;
         }
+
+        // Focus message box on load for quick input.
+        contentInput.focus();
+
+        // Modal helpers
+        function closeModal() {
+            modal.classList.remove("open");
+            contentInput.focus();
+        }
+        async function openModal() {
+            modal.classList.add("open");
+            modalBody.innerHTML = "<p class='muted'>로딩 중...</p>";
+            try {
+                const res = await fetch("{{ url_for('chat_all') }}");
+                const data = await res.json();
+                if (!data.length) {
+                    modalBody.innerHTML = "<p>메시지가 없습니다.</p>";
+                    return;
+                }
+                const rows = data
+                    .map(
+                        (m) => `
+                        <tr>
+                            <td>${new Date(m.created_at).toLocaleString()}</td>
+                            <td>${m.user}</td>
+                            <td>${m.content}</td>
+                        </tr>`
+                    )
+                    .join("");
+                modalBody.innerHTML = `
+                    <div class="table-wrap modal-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>시간</th>
+                                    <th>유저</th>
+                                    <th>내용</th>
+                                </tr>
+                            </thead>
+                            <tbody>${rows}</tbody>
+                        </table>
+                    </div>`;
+            } catch (e) {
+                modalBody.innerHTML = "<p class='note error'>메시지를 불러오지 못했습니다.</p>";
+            }
+        }
+
+        openAllBtn?.addEventListener("click", openModal);
+        modalClose?.addEventListener("click", closeModal);
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) closeModal();
+        });
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && modal.classList.contains("open")) {
+                closeModal();
+            }
+        });
     })();
 </script>
 {% endblock %}
