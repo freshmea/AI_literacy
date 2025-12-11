@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+    <header>
+        <p class="eyebrow">테이블</p>
+        <h2>테이블 스타일</h2>
+        <p>thead, tbody, tfoot을 활용한 데이터 표현.</p>
+    </header>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>역할</th>
+                    <th>상태</th>
+                    <th>업데이트</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>데이터 수집</td>
+                    <td>ETL</td>
+                    <td><span class="pill pill-green">완료</span></td>
+                    <td>2024-05-01</td>
+                </tr>
+                <tr>
+                    <td>전처리</td>
+                    <td>정규화</td>
+                    <td><span class="pill pill-orange">진행 중</span></td>
+                    <td>2024-05-08</td>
+                </tr>
+                <tr>
+                    <td>모델 학습</td>
+                    <td>검증</td>
+                    <td><span class="pill pill-blue">대기</span></td>
+                    <td>예정</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">샘플 데이터 — 원하는 칼럼을 추가해 보세요.</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</section>
+{% endblock %}

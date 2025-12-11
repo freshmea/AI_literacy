@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+    <header>
+        <p class="eyebrow">레이아웃</p>
+        <h2>카드와 텍스트 요소</h2>
+        <p>h1~h6, 단락, 목록, 인용구, 배지 등 다양한 요소에 스타일을 적용합니다.</p>
+    </header>
+    <div class="grid">
+        <article class="card">
+            <h3>제목과 본문</h3>
+            <h4>h4 소제목</h4>
+            <p>단락 텍스트입니다. <a href="{{ url_for('code_page') }}">링크</a>와 <strong>강조</strong>, <em>기울임</em>을 포함합니다.</p>
+            <blockquote>“시각적 위계는 정보를 빠르게 이해하게 합니다.”</blockquote>
+            <ul>
+                <li>불릿 리스트 항목</li>
+                <li>또 다른 리스트 항목</li>
+                <li>아이콘 대신 다양한 스타일 사용</li>
+            </ul>
+        </article>
+        <article class="card">
+            <h3>정의 리스트</h3>
+            <dl>
+                <dt>FastAPI</dt>
+                <dd>파이썬 기반의 빠른 웹 프레임워크.</dd>
+                <dt>Jinja 템플릿</dt>
+                <dd>서버 사이드 렌더링을 위한 템플릿 엔진.</dd>
+                <dt>Static Files</dt>
+                <dd>CSS, JS, 이미지 등 정적 자산 서빙.</dd>
+            </dl>
+            <div class="badges">
+                <span class="pill pill-green">accessibility</span>
+                <span class="pill pill-blue">semantic</span>
+                <span class="pill pill-orange">contrast</span>
+            </div>
+        </article>
+        <article class="card">
+            <h3>프로그레스 & 메타 정보</h3>
+            <p>progress, meter 태그로 상태를 표현합니다.</p>
+            <label>진행도 <progress value="70" max="100"></progress></label>
+            <label>품질 지표 <meter min="0" low="30" high="80" max="100" optimum="90" value="82"></meter></label>
+            <aside class="note">
+                <strong>NOTE</strong> 이 영역은 aside로 표시된 보조 정보입니다.
+            </aside>
+        </article>
+    </div>
+</section>
+{% endblock %}

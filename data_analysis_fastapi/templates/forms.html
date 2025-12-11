@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+    <header>
+        <p class="eyebrow">폼</p>
+        <h2>폼 요소</h2>
+        <p>input, select, checkbox, radio, textarea, button 등 다양한 컨트롤.</p>
+    </header>
+    <form class="demo-form">
+        <div class="field">
+            <label for="name">이름</label>
+            <input id="name" name="name" type="text" placeholder="홍길동" required>
+        </div>
+        <div class="field">
+            <label for="email">이메일</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com">
+        </div>
+        <div class="field inline">
+            <div>
+                <label for="role">역할</label>
+                <select id="role" name="role">
+                    <option>데이터 엔지니어</option>
+                    <option>데이터 분석가</option>
+                    <option>ML 엔지니어</option>
+                </select>
+            </div>
+            <div>
+                <label for="date">날짜</label>
+                <input id="date" name="date" type="date">
+            </div>
+        </div>
+        <fieldset>
+            <legend>알림 설정</legend>
+            <label class="check">
+                <input type="checkbox" name="notify" checked>
+                이메일 알림
+            </label>
+            <label class="check">
+                <input type="checkbox" name="sms">
+                문자 알림
+            </label>
+        </fieldset>
+        <fieldset>
+            <legend>우선순위</legend>
+            <label class="check">
+                <input type="radio" name="priority" value="high" checked>
+                높음
+            </label>
+            <label class="check">
+                <input type="radio" name="priority" value="medium">
+                보통
+            </label>
+            <label class="check">
+                <input type="radio" name="priority" value="low">
+                낮음
+            </label>
+        </fieldset>
+        <div class="field">
+            <label for="message">메모</label>
+            <textarea id="message" name="message" rows="4" placeholder="상세 내용을 남겨주세요."></textarea>
+        </div>
+        <div class="actions">
+            <button type="submit" class="btn primary">제출</button>
+            <button type="reset" class="btn ghost">초기화</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

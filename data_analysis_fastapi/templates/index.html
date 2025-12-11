@@ -1,235 +1,54 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ app_name }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
-</head>
-<body>
-    <header class="topbar">
-        <div class="brand">
-            <div class="dot"></div>
-            <div>
-                <strong>{{ app_name }}</strong>
-                <small>{{ tagline }}</small>
-            </div>
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+    <div>
+        <p class="eyebrow">FASTAPI + HTML + CSS</p>
+        <h1>다양한 HTML 태그와 CSS 스타일을 한 눈에</h1>
+        <p>FastAPI 템플릿 렌더링과 정적 파일 서빙 데모입니다. 메뉴별 샘플 페이지를 탐색해보세요.</p>
+        <div class="hero-actions">
+            <a class="btn primary" href="https://fastapi.tiangolo.com/" target="_blank" rel="noreferrer">FastAPI 문서</a>
+            <a class="btn ghost" href="{{ url_for('forms_page') }}">폼 예시로 이동</a>
         </div>
-        <nav>
-            <a href="#layout">레이아웃</a>
-            <a href="#table">테이블</a>
-            <a href="#forms">폼</a>
-            <a href="#code">코드</a>
-        </nav>
+    </div>
+    <figure class="hero-card">
+        <figcaption>카드 + 리스트 + 배지</figcaption>
+        <ul class="pill-list">
+            <li><span class="pill pill-green">semantic</span> 의미 있는 태그 활용</li>
+            <li><span class="pill pill-purple">layout</span> CSS Grid & Flex</li>
+            <li><span class="pill pill-orange">tone</span> 컬러와 타이포 조합</li>
+            <li><span class="pill pill-blue">action</span> 버튼과 링크 스타일</li>
+        </ul>
+    </figure>
+</section>
+
+<section class="panel">
+    <header>
+        <p class="eyebrow">샘플 페이지</p>
+        <h2>각 메뉴별 HTML 샘플을 별도 문서로 분리</h2>
+        <p>레이아웃, 테이블, 폼, 코드 샘플을 각각 다른 템플릿에서 관리하여 깔끔하게 구조화했습니다.</p>
     </header>
-
-    <main class="page">
-        <section class="hero">
-            <div>
-                <p class="eyebrow">FASTAPI + HTML + CSS</p>
-                <h1>다양한 HTML 태그와 CSS 스타일을 한 눈에</h1>
-                <p>FastAPI 템플릿 렌더링과 정적 파일 서빙 데모입니다. 여기에 필요한 구성 요소들을 원하는 대로 확장할 수 있습니다.</p>
-                <div class="hero-actions">
-                    <a class="btn primary" href="https://fastapi.tiangolo.com/" target="_blank" rel="noreferrer">FastAPI 문서</a>
-                    <a class="btn ghost" href="#forms">폼 예시로 이동</a>
-                </div>
-            </div>
-            <figure class="hero-card">
-                <figcaption>카드 + 리스트 + 배지</figcaption>
-                <ul class="pill-list">
-                    <li><span class="pill pill-green">semantic</span> 의미 있는 태그 활용</li>
-                    <li><span class="pill pill-purple">layout</span> CSS Grid & Flex</li>
-                    <li><span class="pill pill-orange">tone</span> 컬러와 타이포 조합</li>
-                    <li><span class="pill pill-blue">action</span> 버튼과 링크 스타일</li>
-                </ul>
-            </figure>
-        </section>
-
-        <section id="layout" class="panel">
-            <header>
-                <p class="eyebrow">레이아웃</p>
-                <h2>카드와 텍스트 요소</h2>
-                <p>h1~h6, 단락, 목록, 인용구, 배지 등 다양한 요소에 스타일을 적용합니다.</p>
-            </header>
-            <div class="grid">
-                <article class="card">
-                    <h3>제목과 본문</h3>
-                    <h4>h4 소제목</h4>
-                    <p>단락 텍스트입니다. <a href="#code">링크</a>와 <strong>강조</strong>, <em>기울임</em>을 포함합니다.</p>
-                    <blockquote>“시각적 위계는 정보를 빠르게 이해하게 합니다.”</blockquote>
-                    <ul>
-                        <li>불릿 리스트 항목</li>
-                        <li>또 다른 리스트 항목</li>
-                        <li>아이콘 대신 다양한 스타일 사용</li>
-                    </ul>
-                </article>
-                <article class="card">
-                    <h3>정의 리스트</h3>
-                    <dl>
-                        <dt>FastAPI</dt>
-                        <dd>파이썬 기반의 빠른 웹 프레임워크.</dd>
-                        <dt>Jinja 템플릿</dt>
-                        <dd>서버 사이드 렌더링을 위한 템플릿 엔진.</dd>
-                        <dt>Static Files</dt>
-                        <dd>CSS, JS, 이미지 등 정적 자산 서빙.</dd>
-                    </dl>
-                    <div class="badges">
-                        <span class="pill pill-green">accessibility</span>
-                        <span class="pill pill-blue">semantic</span>
-                        <span class="pill pill-orange">contrast</span>
-                    </div>
-                </article>
-                <article class="card">
-                    <h3>프로그레스 & 메타 정보</h3>
-                    <p>progress, meter 태그로 상태를 표현합니다.</p>
-                    <label>진행도 <progress value="70" max="100"></progress></label>
-                    <label>품질 지표 <meter min="0" low="30" high="80" max="100" optimum="90" value="82"></meter></label>
-                    <aside class="note">
-                        <strong>NOTE</strong> 이 영역은 aside로 표시된 보조 정보입니다.
-                    </aside>
-                </article>
-            </div>
-        </section>
-
-        <section id="table" class="panel">
-            <header>
-                <p class="eyebrow">테이블</p>
-                <h2>테이블 스타일</h2>
-                <p>thead, tbody, tfoot을 활용한 데이터 표현.</p>
-            </header>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>이름</th>
-                            <th>역할</th>
-                            <th>상태</th>
-                            <th>업데이트</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>데이터 수집</td>
-                            <td>ETL</td>
-                            <td><span class="pill pill-green">완료</span></td>
-                            <td>2024-05-01</td>
-                        </tr>
-                        <tr>
-                            <td>전처리</td>
-                            <td>정규화</td>
-                            <td><span class="pill pill-orange">진행 중</span></td>
-                            <td>2024-05-08</td>
-                        </tr>
-                        <tr>
-                            <td>모델 학습</td>
-                            <td>검증</td>
-                            <td><span class="pill pill-blue">대기</span></td>
-                            <td>예정</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="4">샘플 데이터 — 원하는 칼럼을 추가해 보세요.</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </section>
-
-        <section id="forms" class="panel">
-            <header>
-                <p class="eyebrow">폼</p>
-                <h2>폼 요소</h2>
-                <p>input, select, checkbox, radio, textarea, button 등 다양한 컨트롤.</p>
-            </header>
-            <form class="demo-form">
-                <div class="field">
-                    <label for="name">이름</label>
-                    <input id="name" name="name" type="text" placeholder="홍길동" required>
-                </div>
-                <div class="field">
-                    <label for="email">이메일</label>
-                    <input id="email" name="email" type="email" placeholder="you@example.com">
-                </div>
-                <div class="field inline">
-                    <div>
-                        <label for="role">역할</label>
-                        <select id="role" name="role">
-                            <option>데이터 엔지니어</option>
-                            <option>데이터 분석가</option>
-                            <option>ML 엔지니어</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="date">날짜</label>
-                        <input id="date" name="date" type="date">
-                    </div>
-                </div>
-                <fieldset>
-                    <legend>알림 설정</legend>
-                    <label class="check">
-                        <input type="checkbox" name="notify" checked>
-                        이메일 알림
-                    </label>
-                    <label class="check">
-                        <input type="checkbox" name="sms">
-                        문자 알림
-                    </label>
-                </fieldset>
-                <fieldset>
-                    <legend>우선순위</legend>
-                    <label class="check">
-                        <input type="radio" name="priority" value="high" checked>
-                        높음
-                    </label>
-                    <label class="check">
-                        <input type="radio" name="priority" value="medium">
-                        보통
-                    </label>
-                    <label class="check">
-                        <input type="radio" name="priority" value="low">
-                        낮음
-                    </label>
-                </fieldset>
-                <div class="field">
-                    <label for="message">메모</label>
-                    <textarea id="message" name="message" rows="4" placeholder="상세 내용을 남겨주세요."></textarea>
-                </div>
-                <div class="actions">
-                    <button type="submit" class="btn primary">제출</button>
-                    <button type="reset" class="btn ghost">초기화</button>
-                </div>
-            </form>
-        </section>
-
-        <section id="code" class="panel">
-            <header>
-                <p class="eyebrow">코드 & 목록</p>
-                <h2>코드, 키보드, 순서 목록</h2>
-                <p>code, kbd, ol 태그로 문서화 스타일을 보여줍니다.</p>
-            </header>
-            <div class="code-block">
-                <pre><code>from fastapi import FastAPI
-
-app = FastAPI()
-
-@app.get("/")
-async def root():
-    return {"message": "Hello FastAPI"}</code></pre>
-            </div>
-            <div class="two-col">
-                <ol>
-                    <li>가상환경 활성화: <kbd>source .venv/bin/activate</kbd></li>
-                    <li>서버 실행: <kbd>uvicorn main:app --reload</kbd></li>
-                    <li>브라우저에서 <kbd>http://127.0.0.1:8000</kbd> 열기</li>
-                </ol>
-                <p class="lead">다양한 HTML 태그와 CSS 조합을 테스트하며 레이아웃, 타이포, 컨트롤 상태 등을 확인할 수 있습니다.</p>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <small>Built with FastAPI · Jinja2 템플릿 · 정적 CSS 데모</small>
-    </footer>
-</body>
-</html>
+    <div class="grid">
+        <article class="card">
+            <h3>레이아웃</h3>
+            <p>카드, 정의 리스트, 배지, 인용구, progress/meter 등을 포함한 섹션.</p>
+            <a class="btn ghost" href="{{ url_for('layout_page') }}">바로가기</a>
+        </article>
+        <article class="card">
+            <h3>테이블</h3>
+            <p>thead/tbody/tfoot 구조와 배지를 적용한 테이블 스타일.</p>
+            <a class="btn ghost" href="{{ url_for('table_page') }}">바로가기</a>
+        </article>
+        <article class="card">
+            <h3>폼</h3>
+            <p>텍스트 필드, 셀렉트, 체크박스, 라디오, textarea, 버튼 예시.</p>
+            <a class="btn ghost" href="{{ url_for('forms_page') }}">바로가기</a>
+        </article>
+        <article class="card">
+            <h3>코드</h3>
+            <p>코드 블록, 키보드 단축키, 순서 리스트를 포함한 문서화 스타일.</p>
+            <a class="btn ghost" href="{{ url_for('code_page') }}">바로가기</a>
+        </article>
+    </div>
+</section>
+{% endblock %}

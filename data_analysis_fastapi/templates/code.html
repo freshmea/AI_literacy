@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+    <header>
+        <p class="eyebrow">코드 & 목록</p>
+        <h2>코드, 키보드, 순서 목록</h2>
+        <p>code, kbd, ol 태그로 문서화 스타일을 보여줍니다.</p>
+    </header>
+    <div class="code-block">
+        <pre><code>from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+async def root():
+    return {"message": "Hello FastAPI"}</code></pre>
+    </div>
+    <div class="two-col">
+        <ol>
+            <li>가상환경 활성화: <kbd>source .venv/bin/activate</kbd></li>
+            <li>서버 실행: <kbd>uvicorn main:app --reload</kbd></li>
+            <li>브라우저에서 <kbd>http://127.0.0.1:8000</kbd> 열기</li>
+        </ol>
+        <p class="lead">다양한 HTML 태그와 CSS 조합을 테스트하며 레이아웃, 타이포, 컨트롤 상태 등을 확인할 수 있습니다.</p>
+    </div>
+</section>
+{% endblock %}

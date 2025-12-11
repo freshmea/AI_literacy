@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="dot"></div>
+            <div>
+                <strong>{{ app_name }}</strong>
+                <small>{{ tagline }}</small>
+            </div>
+        </div>
+        <nav>
+            <a href="{{ url_for('home') }}" class="{{ 'active' if current_page == 'home' else '' }}">홈</a>
+            <a href="{{ url_for('layout_page') }}" class="{{ 'active' if current_page == 'layout' else '' }}">레이아웃</a>
+            <a href="{{ url_for('table_page') }}" class="{{ 'active' if current_page == 'table' else '' }}">테이블</a>
+            <a href="{{ url_for('forms_page') }}" class="{{ 'active' if current_page == 'forms' else '' }}">폼</a>
+            <a href="{{ url_for('code_page') }}" class="{{ 'active' if current_page == 'code' else '' }}">코드</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <small>Built with FastAPI · Jinja2 템플릿 · 정적 CSS 데모</small>
+    </footer>
+</body>
+</html>

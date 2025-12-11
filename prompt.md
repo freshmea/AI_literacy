@@ -39,3 +39,5 @@ html 문서는 index.html 문서를 따로 만들어서 보여주고 css 도 적
 - data_analysis_fastapi 폴더를 새로 만들어서
 그 안에서 uv 가상환경으로 fastapi 라이브러리를 사용해서 html 문서를 웹에 보여줘
 html 문서는 index.html 문서를 따로 만들어서 보여주고 css 도 적용해서 css 파일을 만들어서 적용해줘 내용은 css가 충분히 demo로 보여 줄 수 있게 다양한 형태의 태그를 사용해줘
+- uvicorn 실행을 코드 안에 넣고 실행 방법을 파이썬 파일을 실행하면 작동하도록 수정해줘
+- html 에 메뉴 마다 따로 html 파일을 만들어서 관리해줘 공통적으로 들어가는 코드도 따로 default로 관리해줘
