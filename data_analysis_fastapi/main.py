@@ -1,20 +1,43 @@
 from pathlib import Path
 
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from datetime import datetime
+from pathlib import Path
+
+from fastapi import Depends, FastAPI, Form, Request, status
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from sqlmodel import Field, Session, SQLModel, create_engine, select
 import uvicorn
-
 
 BASE_DIR = Path(__file__).resolve().parent
 APP_NAME = "AI Literacy FastAPI Demo"
 TAGLINE = "A colorful tour of semantic HTML styled with CSS"
+DATABASE_URL = f"sqlite:///{BASE_DIR / 'chat.db'}"
 
 app = FastAPI(title=APP_NAME, version="0.1.0")
 
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
+
+
+class ChatMessage(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    user: str = Field(index=True)
+    content: str
+    created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
+
+
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+
+
+def create_db_and_tables() -> None:
+    SQLModel.metadata.create_all(engine)
+
+
+def get_session() -> Session:
+    with Session(engine) as session:
+        yield session
 
 
 def render(request: Request, template_name: str, current_page: str) -> HTMLResponse:
@@ -56,6 +79,57 @@ async def code_page(request: Request) -> HTMLResponse:
     return render(request, "code.html", current_page="code")
 
 
+@app.get("/chat", response_class=HTMLResponse, name="chat_page")
+def chat_page(
+    request: Request,
+    session: Session = Depends(get_session),
+) -> HTMLResponse:
+    messages = session.exec(
+        select(ChatMessage).order_by(ChatMessage.created_at.desc()).limit(40)
+    ).all()
+    error = request.query_params.get("error")
+    return templates.TemplateResponse(
+        "chat.html",
+        {
+            "request": request,
+            "app_name": APP_NAME,
+            "tagline": TAGLINE,
+            "current_page": "chat",
+            "messages": messages,
+            "error": error,
+        },
+    )
+
+
+@app.post("/chat")
+def post_chat(
+    user: str = Form(...),
+    content: str = Form(...),
+    session: Session = Depends(get_session),
+):
+    trimmed_user = user.strip()
+    trimmed_content = content.strip()
+
+    if not trimmed_user:
+        return RedirectResponse(
+            url="/chat?error=이름을 입력해야 채팅을 보낼 수 있습니다.",
+            status_code=status.HTTP_303_SEE_OTHER,
+        )
+    if not trimmed_content:
+        return RedirectResponse(url="/chat", status_code=status.HTTP_303_SEE_OTHER)
+
+    message = ChatMessage(user=trimmed_user, content=trimmed_content)
+    session.add(message)
+    session.commit()
+    session.refresh(message)
+    return RedirectResponse(url="/chat", status_code=status.HTTP_303_SEE_OTHER)
+
+
+@app.on_event("startup")
+def on_startup() -> None:
+    create_db_and_tables()
+
+
 if __name__ == "__main__":
     # Allow running `python main.py` directly for convenience.
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
