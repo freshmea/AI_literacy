@@ -14,29 +14,22 @@
         </div>
     </header>
 
-    <div class="table-wrap chat-table">
-        <table>
-            <thead>
-                <tr>
-                    <th>시간 (UTC)</th>
-                    <th>유저</th>
-                    <th>내용</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in messages %}
-                    <tr>
-                        <td>{{ item.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                        <td>{{ item.user }}</td>
-                        <td>{{ item.content }}</td>
-                    </tr>
-                {% else %}
-                    <tr>
-                <td colspan="3">아직 채팅이 없습니다. 첫 메시지를 남겨보세요!</td>
-            </tr>
-        {% endfor %}
-            </tbody>
-        </table>
+    {% set last_id = messages[-1].id if messages else 0 %}
+    <div class="chat-shell">
+        <div class="chat-window" id="chat-window" data-last-id="{{ last_id }}">
+            {% for item in messages %}
+                <article class="chat-message" data-id="{{ item.id }}" data-user="{{ item.user }}">
+                    <header class="chat-meta">
+                        <span class="chat-user">{{ item.user }}</span>
+                        <span class="chat-time">{{ item.created_at.strftime('%Y-%m-%d %H:%M:%S') }} UTC</span>
+                    </header>
+                    <p class="chat-bubble">{{ item.content }}</p>
+                </article>
+            {% else %}
+                <div class="empty-chat">아직 채팅이 없습니다. 첫 메시지를 남겨보세요!</div>
+            {% endfor %}
+        </div>
+        <div class="chat-status" id="chat-status">4초마다 새 메시지를 확인합니다.</div>
     </div>
 
     <form id="chat-form" class="demo-form chat-form" method="post" action="{{ url_for('post_chat') }}">
@@ -76,9 +69,13 @@
         const modal = document.getElementById("all-modal");
         const modalClose = document.getElementById("modal-close");
         const modalBody = document.getElementById("modal-body");
+        const chatWindow = document.getElementById("chat-window");
+        const chatStatus = document.getElementById("chat-status");
         if (storedUser) {
             userInput.value = storedUser;
         }
+        let currentUser = storedUser || "";
+        let lastSeenId = Number(chatWindow?.dataset.lastId || 0);
 
         // Submit on Enter, allow Shift+Enter for newline.
         contentInput.addEventListener("keydown", (e) => {
@@ -89,19 +86,93 @@
         });
 
         form.addEventListener("submit", () => {
-            localStorage.setItem("chat_user", userInput.value.trim());
+            currentUser = userInput.value.trim();
+            localStorage.setItem("chat_user", currentUser);
             // Keep focus for rapid consecutive messages.
             setTimeout(() => contentInput.focus(), 0);
+            applyMineClass();
         });
 
+        const escapeHtml = (str = "") =>
+            str.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+
+        function applyMineClass() {
+            if (!chatWindow) return;
+            chatWindow.querySelectorAll(".chat-message").forEach((node) => {
+                const { user } = node.dataset;
+                node.classList.toggle("mine", currentUser && user === currentUser);
+            });
+        }
+
+        function renderMessages(list) {
+            if (!chatWindow) return;
+            if (!list.length) {
+                chatWindow.innerHTML = "<div class='empty-chat'>아직 채팅이 없습니다. 첫 메시지를 남겨보세요!</div>";
+                lastSeenId = 0;
+                chatWindow.dataset.lastId = "0";
+                return;
+            }
+
+            const ordered = [...list].sort(
+                (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+            );
+            const markup = ordered
+                .map(
+                    (m) => `
+                        <article class="chat-message" data-id="${m.id}" data-user="${escapeHtml(m.user)}">
+                            <header class="chat-meta">
+                                <span class="chat-user">${escapeHtml(m.user)}</span>
+                                <span class="chat-time">${new Date(m.created_at).toLocaleString()} </span>
+                            </header>
+                            <p class="chat-bubble">${escapeHtml(m.content)}</p>
+                        </article>
+                    `
+                )
+                .join("");
+            chatWindow.innerHTML = markup;
+            lastSeenId = ordered[ordered.length - 1].id;
+            chatWindow.dataset.lastId = String(lastSeenId);
+            applyMineClass();
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
         // Scroll to latest messages at bottom.
-        const chatWrap = document.querySelector(".chat-table");
-        if (chatWrap) {
-            chatWrap.scrollTop = chatWrap.scrollHeight;
+        if (chatWindow) {
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+            applyMineClass();
         }
 
         // Focus message box on load for quick input.
         contentInput.focus();
+
+        async function refreshMessages(triggeredByPoll = false) {
+            try {
+                const res = await fetch("{{ url_for('chat_all') }}");
+                if (!res.ok) throw new Error("요청 실패");
+                const data = await res.json();
+                const newestId = data.length ? data[0].id : 0;
+                if (triggeredByPoll && newestId === lastSeenId) return;
+                renderMessages(data);
+                if (triggeredByPoll && chatStatus) {
+                    chatStatus.textContent = data.length
+                        ? "새 메시지로 갱신되었습니다."
+                        : "메시지가 없습니다.";
+                    setTimeout(() => {
+                        chatStatus.textContent = "4초마다 새 메시지를 확인합니다.";
+                    }, 2000);
+                }
+            } catch (err) {
+                if (chatStatus) {
+                    chatStatus.textContent = "새 메시지를 가져오지 못했습니다.";
+                }
+            }
+        }
+
+        setInterval(() => refreshMessages(true), 4000);
 
         // Modal helpers
         function closeModal() {
